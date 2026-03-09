@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELTHRANY FF BOT</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #ff0033;
+    --orange: #ff6600;
+    --gold: #ffd700;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card: #0f0f1a;
+    --border: rgba(255,0,51,0.3);
+    --glow: 0 0 20px rgba(255,0,51,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--darker);
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* خلفية متحركة */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,0,51,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,0,51,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(40px); }
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,0,51,0.08) 0%, transparent 70%);
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  /* الهيدر */
+  .header {
+    text-align: center;
+    animation: fadeDown 0.8s ease;
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--red), var(--orange), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  .logo-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    margin-top: 16px;
+  }
+
+  /* كارد الرئيسي */
+  .card {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.05);
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title::before {
+    content: '';
+    width: 4px; height: 20px;
+    background: linear-gradient(var(--red), var(--orange));
+    border-radius: 2px;
+  }
+
+  /* input المفتاح */
+  .input-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .key-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,0,51,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    outline: none;
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .key-input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255,0,51,0.1), var(--glow);
+    background: rgba(255,0,51,0.04);
+  }
+  .key-input::placeholder { color: rgba(255,255,255,0.2); letter-spacing: 1px; font-size: 14px; }
+
+  /* زر التفعيل */
+  .btn-activate {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--red), #cc0029);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-activate::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+  }
+  .btn-activate:hover::before { left: 100%; }
+  .btn-activate:hover {
+    background: linear-gradient(135deg, #ff1a47, var(--red));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,0,51,0.4);
+  }
+  .btn-activate:active { transform: translateY(0); }
+  .btn-activate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* نتيجة التحقق */
+  .result {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .result.success {
+    background: rgba(0,255,100,0.08);
+    border: 1px solid rgba(0,255,100,0.3);
+    display: block;
+  }
+  .result.error {
+    background: rgba(255,0,51,0.08);
+    border: 1px solid rgba(255,0,51,0.3);
+    display: block;
+  }
+
+  .result-icon { font-size: 28px; margin-bottom: 8px; }
+  .result-msg { font-size: 15px; font-weight: 600; }
+  .result-detail { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  /* معلومات المفتاح */
+  .key-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .info-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .info-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
+  .info-value { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); margin-top: 4px; }
+
+  /* الباقات */
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .plan-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 10px;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .plan-card:hover {
+    border-color: var(--red);
+    transform: translateY(-4px);
+    box-shadow: var(--glow);
+  }
+  .plan-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(255,215,0,0.05), var(--card));
+  }
+  .plan-icon { font-size: 24px; margin-bottom: 8px; }
+  .plan-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8); }
+  .plan-price { font-family: 'Rajdhani', sans-serif; font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+  /* فوتر */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  /* loading */
+  .spinner {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* scan animation */
+  .scanning {
+    position: relative;
+    overflow: hidden;
+  }
+  .scanning::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    animation: scan 1s ease-in-out infinite;
+  }
+  @keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="container">
+
+  <!-- الهيدر -->
+  <div class="header">
+    <div class="logo-text">ELTHRANY FF</div>
+    <div class="logo-sub">BOT SYSTEM · KEY ACTIVATION</div>
+    <div class="logo-line"></div>
+  </div>
+
+  <!-- كارد التفعيل -->
+  <div class="card" id="activationCard">
+    <div class="card-title">تفعيل المفتاح</div>
+
+    <div class="input-wrap">
+      <input type="text" class="key-input" id="keyInput"
+        placeholder="ELTH-XXXX-XXXX-XXXX"
+        maxlength="19"
+        oninput="formatKey(this)">
+    </div>
+
+    <button class="btn-activate" id="activateBtn" onclick="checkKey()">
+      🔑 تحقق وفعّل
+    </button>
+
+    <div class="result" id="result">
+      <div class="result-icon" id="resultIcon"></div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="result-detail" id="resultDetail"></div>
+    </div>
+
+    <div class="key-info" id="keyInfo" style="display:none">
+      <div class="info-box">
+        <div class="info-label">الباقة</div>
+        <div class="info-value" id="infoPlan">—</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">ينتهي</div>
+        <div class="info-value" id="infoExpiry">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- الباقات -->
+  <div class="plans-grid">
+    <div class="plan-card">
+      <div class="plan-icon">⚡</div>
+      <div class="plan-name">يوم واحد</div>
+      <div class="plan-price">تجريبي</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-icon">🔥</div>
+      <div class="plan-name">7 أيام</div>
+      <div class="plan-price">أسبوعي</div>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-icon">👑</div>
+      <div class="plan-name">مدى الحياة</div>
+      <div class="plan-price">دائم</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    ELTHRANY FF BOT © 2026 · جميع الحقوق محفوظة
+  </div>
+
+</div>
+
+<script>
+  const API = "http://localhost:5000"; // غير للرابط بتاعك
+
+  function formatKey(input) {
+    let val = input.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    // ELTH-XXXX-XXXX-XXXX
+    let parts = [];
+    if (val.length > 0) parts.push(val.substring(0, 4));
+    if (val.length > 4) parts.push(val.substring(4, 8));
+    if (val.length > 8) parts.push(val.substring(8, 12));
+    if (val.length > 12) parts.push(val.substring(12, 16));
+    input.value = parts.join('-');
+  }
+
+  async function checkKey() {
+    const key = document.getElementById('keyInput').value.trim();
+    const btn = document.getElementById('activateBtn');
+    const result = document.getElementById('result');
+    const keyInfo = document.getElementById('keyInfo');
+
+    if (!key || key.length < 10) {
+      showResult('error', '❌', 'أدخل المفتاح أولاً', '');
+      return;
+    }
+
+    // loading state
+    btn.disabled = true;
+    btn.innerHTML = 'جاري التحقق <span class="spinner"></span>';
+    document.getElementById('activationCard').classList.add('scanning');
+    result.style.display = 'none';
+    keyInfo.style.display = 'none';
+
+    try {
+      const res = await fetch(`${API}/check`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key })
+      });
+      const data = await res.json();
+
+      if (data.valid) {
+        showResult('success', '✅', 'مفتاح صالح! البوت جاهز', `الباقة: ${planName(data.plan)}`);
+        document.getElementById('infoPlan').textContent = planName(data.plan);
+        document.getElementById('infoExpiry').textContent = data.expires === 'lifetime' ? '♾️ دائم' : formatDate(data.expires);
+        keyInfo.style.display = 'grid';
+        // حفظ المفتاح
+        localStorage.setItem('ff_key', key);
+      } else {
+        showResult('error', '❌', data.msg || 'مفتاح غير صالح', 'تواصل مع الأدمن للحصول على مفتاح');
+      }
+    } catch(e) {
+      showResult('error', '⚠️', 'خطأ في الاتصال بالسيرفر', e.message);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '🔑 تحقق وفعّل';
+    document.getElementById('activationCard').classList.remove('scanning');
+  }
+
+  function showResult(type, icon, msg, detail) {
+    const result = document.getElementById('result');
+    result.className = `result ${type}`;
+    document.getElementById('resultIcon').textContent = icon;
+    document.getElementById('resultMsg').textContent = msg;
+    document.getElementById('resultDetail').textContent = detail;
+    result.style.display = 'block';
+  }
+
+  function planName(plan) {
+    const plans = {
+      '1day': 'يوم واحد', '3days': '3 أيام',
+      '7days': '7 أيام', '30days': '30 يوم', 'lifetime': 'مدى الحياة'
+    };
+    return plans[plan] || plan;
+  }
+
+  function formatDate(d) {
+    if (!d) return '—';
+    return d.split(' ')[0];
+  }
+
+  // تحميل مفتاح محفوظ
+  window.onload = () => {
+    const saved = localStorage.getItem('ff_key');
+    if (saved) document.getElementById('keyInput').value = saved;
+  };
+
+  // Enter للتفعيل
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkKey();
+  });
+</script>
+</body>
+</html>
